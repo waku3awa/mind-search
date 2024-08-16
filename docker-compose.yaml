@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  base:
+    build: ./container-base
+    container_name: mind-search-base
+    ports:
+      - 7861:7861
+    tty: true
+    volumes:
+      - .:/workspaces
+    extra_hosts:
+      # - 'host.docker.internal:host-gateway'
+      - 'host.docker.internal:172.19.128.1'
+
+  gpu:
+    build: ./container-base
+    tty: true
+    volumes:
+      - .:/workspaces
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 2
+              capabilities: [gpu]
+    extra_hosts:
+      # - 'host.docker.internal:host-gateway'
+      - 'host.docker.internal:172.19.128.1'
